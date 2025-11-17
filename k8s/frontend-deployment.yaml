@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hms-frontend
+  labels:
+    app: hms-frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hms-frontend
+  template:
+    metadata:
+      labels:
+        app: hms-frontend
+    spec:
+      containers:
+      - name: hms-frontend
+        # IMPORTANT: replace this image with your frontend image (e.g. ghcr.io/ORG/hms-frontend:tag or dockerhub: user/hms-frontend:tag)
+        image: REPLACE_WITH_FRONTEND_IMAGE
+        ports:
+        - containerPort: 80
+        env:
+        - name: NODE_ENV
+          value: "production"
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
+          requests:
+            cpu: "250m"
+            memory: "128Mi"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
