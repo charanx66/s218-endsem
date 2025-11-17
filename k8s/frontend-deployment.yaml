@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
       - name: hms-frontend
-        # IMPORTANT: replace this image with your frontend image (e.g. ghcr.io/ORG/hms-frontend:tag or dockerhub: user/hms-frontend:tag)
-        image: REPLACE_WITH_FRONTEND_IMAGE
+  # Image built by GitHub Actions workflow and pushed to GHCR
+  image: ghcr.io/charanx66/hospital-frontend:latest
         ports:
         - containerPort: 80
         env:
