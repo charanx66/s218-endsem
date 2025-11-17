@@ -1,12 +1,17 @@
 # Build stage
 FROM node:18-alpine AS build
 WORKDIR /app
-# copy only package files first for better caching
-COPY frontend/package*.json ./
-COPY frontend/yarn.lock ./
-RUN npm ci --silent || true
-# copy frontend sources
+
+# Copy the frontend sources (submodule) into the image. The workflow now checks out submodules.
+# We keep this simple and robust: install using `npm ci` when package-lock.json exists, otherwise fallback to `npm install`.
 COPY frontend/ ./
+
+RUN if [ -f package-lock.json ]; then \
+			npm ci --silent; \
+		else \
+			npm install --silent; \
+		fi
+
 RUN npm run build
 
 # Production stage
